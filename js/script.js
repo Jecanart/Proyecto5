@@ -1,4 +1,3 @@
-
 let load = (data) => { 
 
   let timezone = data["timezone"]
@@ -18,6 +17,26 @@ let load = (data) => {
 
 }
 
+let loadInocar = () => {
+
+  let URL = 'https://cors-anywhere.herokuapp.com/https://www.inocar.mil.ec/mareas/consultan.php';
+  fetch(URL)
+ 	.then(response => response.text())
+    .then(data => {
+       const parser = new DOMParser();
+       const xml = parser.parseFromString(data, "text/html");
+       console.log(xml);
+    })
+    .catch(console.error);
+
+    let contenedorMareas = xml.getElementsByClassName('container-fluid')[0];
+    let contenedorHTML = document.getElementById('chart3');
+    contenedorHTML.innerHTML = contenedorMareas.innerHTML;
+
+}
+
+
+
 
 let plot = (data) => { 
 
@@ -33,7 +52,6 @@ let plot = (data) => {
         tension: 0.1
     }]  
 };
-
 
 const dataset2 = {
   labels: data.daily.time, /* ETIQUETA DE DATOS */
@@ -65,17 +83,16 @@ const dataset2 = {
       }
     },
   };
-
   const chart = new Chart(ctx, config)
   const chart2 = new Chart(ctx2, config2)
 
-
  }
+
 
 (
   function () {
     let meteo = localStorage.getItem('meteo');
-   
+    
     if(meteo == null) {
       let URL = 'https://api.open-meteo.com/v1/forecast?latitude=-2.20&longitude=-79.89&hourly=temperature_2m&daily=temperature_2m_max&timezone=auto';
           
@@ -95,5 +112,8 @@ const dataset2 = {
         load(JSON.parse(meteo))
   
     }
+
+    loadInocar();
+    
   }
 )();
