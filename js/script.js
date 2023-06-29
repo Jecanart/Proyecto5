@@ -24,7 +24,6 @@ let load = (data) => {
 }
 
 let loadInocar = () => {
-
   let URL_proxy = 'https://robwu.nl/cors-anywhere.html';
   let URL = URL_proxy + 'https://www.inocar.mil.ec/mareas/consultan.php';
   fetch(URL)
