@@ -2,36 +2,47 @@ let load = (data) => {
 
   let timezone = data["timezone"]
   let timezone_ab = data["timezone_abbreviation"]
+  let latiJson = data["latitude"]
+  let longiJson = data["longitude"]
 
   let timezoneHTML = document.getElementById("timez")
   let timezone_abHTML = document.getElementById("timeza")
+  let latiHTML = document.getElementById("latiti")
+  let longiHTML = document.getElementById("longit")
 
   timezoneHTML.textContent = timezone
   timezone_abHTML.textContent = timezone_ab
+  latiHTML.textContent= latiJson
+  longiHTML.textContent= longiJson
 
   plot(data)
 
   
 
-  console.log(data);
+  //console.log(data);
 
 }
 
 let loadInocar = () => {
 
-  let URL = 'https://cors-anywhere.herokuapp.com/https://www.inocar.mil.ec/mareas/consultan.php';
+  let URL_proxy = 'http://localhost:8080/';
+  let URL = URL_proxy + 'https://www.inocar.mil.ec/mareas/consultan.php';
   fetch(URL)
- 	.then(response => response.text())
-    .then(data => {
-       const parser = new DOMParser();
-       const xml = parser.parseFromString(data, "text/html");
-       console.log(xml);
-    })
-    .catch(console.error);
+     	.then(response => response.text())
+        .then(data => {
+           const parser = new DOMParser();
+           const xml = parser.parseFromString(data, "text/html");
+           console.log(xml);
+           let contenedorMareas = xml.getElementsByTagName('div')[0];
+           let contenedorHTML = document.getElementById('chart3');
+           contenedorHTML.innerHTML = contenedorMareas.innerHTML;
 
-    let contenedorMareas = xml.getElementsByClassName('container-fluid')[0];
-    let contenedorHTML = document.getElementById('chart3');
-    contenedorHTML.innerHTML = contenedorMareas.innerHTML;
+          
+
+        })
+    .catch(console.error);
+    
+    
 
 }
 
